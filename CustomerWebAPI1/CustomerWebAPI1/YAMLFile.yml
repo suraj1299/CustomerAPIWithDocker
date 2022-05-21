@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: CustomerWebAPI1-deployment
+  labels:
+    app: CustomerWebAPI1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: CustomerWebAPI1  
+  template:
+    metadata:
+      labels:
+        app: CustomerWebAPI1
+    spec:
+      containers:
+      - name: myazurecr010
+        image: myazurecr010.azurecr.io/azurecontainerrepoaks:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: webapisvcsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: CustomerWebAPI1svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: CustomerWebAPI1
